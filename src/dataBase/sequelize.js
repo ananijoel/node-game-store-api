@@ -1,6 +1,7 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize")
 const ItemModel = require('../models/item')
-const { faker } = require('@faker-js/faker');
+const Items = require('./mock-Items')
+//const { faker } = require('@faker-js/faker')
 let sequelize
 if(process.env.NODE_ENV === 'production'){
      sequelize = new Sequelize('u63v5gahi9wsuren', 'rc6ejreecou21zyy', 'yrt38ps6ix90j1by', {
@@ -10,7 +11,7 @@ if(process.env.NODE_ENV === 'production'){
           timezone: 'Etc/GMT',
         },
         logging: true
-      });
+      })
 } else {
      sequelize = new Sequelize('Store', 'root', '', {
         host: 'localhost',
@@ -19,7 +20,7 @@ if(process.env.NODE_ENV === 'production'){
           timezone: 'Etc/GMT',
         },
         logging: false
-      });
+      })
 }
 
 
@@ -27,17 +28,17 @@ const Item = ItemModel(sequelize, DataTypes)
 
 const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
-      for(let i = 0;i<20;i++){
+      Items.map(item =>{
         Item.create({
-            name: faker.commerce.productName(),
-            price: parseFloat(faker.commerce.price({ min: 1000, max: 1000000000 })),
-            description: faker.commerce.productDescription(),
-            quantity: faker.number.int(20),
-            category: faker.commerce.productAdjective(),
-            matricule: faker.commerce.isbn(7),
-            image: faker.commerce.price({ min: 1000, max: 1000000000 })
+            name: item.name,
+            price: parseFloat(item.price),
+            description: item.description,
+            quantity: item.quantity,
+            category: item.category,
+            matricule: item.matricule,
+            image: item.image
         })
-      }
+      })
       console.log('La base de données a bien été initialisée !');
     });
   };

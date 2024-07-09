@@ -10,9 +10,6 @@ module.exports  = (Sequelize,DataTypes) =>{
         name: {
             type: DataTypes.STRING,
             allowNull : false,
-            unique:{
-                msg: 'Le nom est deja pris'
-            },
             validate:{
                 notNull:{msg:`le nom de l'item ne doit pas etre nulle` },
                 notEmpty:{msg:`le nom de l'item ne doit pas etre vide`}
