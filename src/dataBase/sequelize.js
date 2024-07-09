@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const ItemModel = require('../models/item')
 const { faker } = require('@faker-js/faker');
-
+let sequelize
 if(process.env.NODE_ENV === 'production'){
-    const sequelize = new Sequelize('u63v5gahi9wsuren', 'rc6ejreecou21zyy', 'yrt38ps6ix90j1by', {
+     sequelize = new Sequelize('u63v5gahi9wsuren', 'rc6ejreecou21zyy', 'yrt38ps6ix90j1by', {
         host: 'uyu7j8yohcwo35j3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         dialect: 'mariadb',
         dialectOptions: {
@@ -12,7 +12,7 @@ if(process.env.NODE_ENV === 'production'){
         logging: true
       });
 } else {
-    const sequelize = new Sequelize('Store', 'root', '', {
+     sequelize = new Sequelize('Store', 'root', '', {
         host: 'localhost',
         dialect: 'mariadb',
         dialectOptions: {
