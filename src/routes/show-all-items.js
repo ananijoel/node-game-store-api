@@ -26,7 +26,7 @@ module.exports = (app) => {
     } else {
       Item.findAll({order: ['name']})
       .then(Items => {
-        const message = 'La liste des pokémons a bien été récupérée.'
+        const message = 'La liste des Produits a bien été récupérée.'
         res.json({ message, data: Items })
       })
       .catch(error =>{
