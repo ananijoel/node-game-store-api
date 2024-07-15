@@ -17,7 +17,8 @@ app
 
 app.get('/', (req, res) => res.json('hello node-game-store-api'))
 require('./src/routes/show-all-items')(app)
-require('./src/routes/show-one-item')(app)
+require('./src/routes/show-item-by-id')(app)
+require('./src/routes/show-item-by-param')(app)
 
 //Gestion des erreurs 404
 app.use(({res})=>{

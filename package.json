@@ -4,7 +4,8 @@
   "description": "Une API REST pour gerer un magasin de jeu video en ligne",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=production node app.js", "dev": "NODE_ENV=development nodemon app.js"
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "author": "Anani Anatide",
   "license": "ISC",

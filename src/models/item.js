@@ -1,63 +1,88 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const validTypes = ['console', 'PS3', 'PS4', 'PS5', 'xboxseries', 'nintendo', 'PC', 'gift cards', 'accessories','jeu'];
 
-module.exports  = (Sequelize,DataTypes) =>{
-    return Sequelize.define('Item',{
-        id:{
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define('Item', {
+        id: {
             type: DataTypes.INTEGER,
-            primaryKey : true,
+            primaryKey: true,
             autoIncrement: true
         },
         name: {
             type: DataTypes.STRING,
-            allowNull : false,
-            validate:{
-                notNull:{msg:`le nom de l'item ne doit pas etre nulle` },
-                notEmpty:{msg:`le nom de l'item ne doit pas etre vide`}
+            allowNull: false,
+            validate: {
+                notNull: { msg: `Le nom de l'item ne doit pas être nul` },
+                notEmpty: { msg: `Le nom de l'item ne doit pas être vide` }
             }
         },
-        price:{
+        price: {
             type: DataTypes.FLOAT,
             allowNull: false,
-            validate:{
-                notNull:{msg:`le prix de l'item ne doit pas etre nulle` },
-                notEmpty:{msg:`le prix de l'item ne doit pas etre vide`}
-            }    
+            validate: {
+                notNull: { msg: `Le prix de l'item ne doit pas être nul` },
+                notEmpty: { msg: `Le prix de l'item ne doit pas être vide` },
+                isFloat: { msg: `Le prix de l'item doit être un nombre valide` },
+                min: {
+                    args: [0],
+                    msg: `Le prix de l'item doit être positif`
+                }
+            }
         },
-        description:{
-            type:DataTypes.TEXT,
-            allowNull:false,
-            validate:{
-                notNull:{msg:`la description de l'item ne doit pas etre nulle` },
-                notEmpty:{msg:`le description de l'item ne doit pas etre vide`}
-            }   
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+            validate: {
+                notNull: { msg: `La description de l'item ne doit pas être nulle` },
+                notEmpty: { msg: `La description de l'item ne doit pas être vide` }
+            }
         },
-        quantity:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            validate:{
-                notNull:{msg:`le nombre d'item ne doit pas etre nulle` },
-                notEmpty:{msg:`le  nombre d'item ne doit pas etre vide`}
-            }   
+        quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notNull: { msg: `Le nombre d'items ne doit pas être nul` },
+                notEmpty: { msg: `Le nombre d'items ne doit pas être vide` }
+            }
         },
-        category:{
-            type:DataTypes.STRING,
-            allowNull:false,
-            validate:{
-                notNull:{msg:`la categorie de l'item ne doit pas etre nulle` },
-                notEmpty:{msg:`categorie de l'item ne doit pas etre vide`}
-            }   
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            get() {
+                return this.getDataValue('category').split(',');
+            },
+            set(category) {
+                if (Array.isArray(category)) {
+                    this.setDataValue('category', category.join());
+                } else {
+                    this.setDataValue('category', category);
+                }
+            },
+            validate: {
+                isTypeValid(value) {
+                    if (!value) {
+                        throw new Error('Un item doit au moins avoir une catégorie.');
+                    }
+                    value.split(',').forEach(type => {
+                        if (!validTypes.includes(type)) {
+                            throw new Error(`La catégorie d'un item doit appartenir à la liste suivante: ${validTypes}`);
+                        }
+                    });
+                }
+            }
         },
-        matricule:{
-            type:DataTypes.STRING,
-            allowNull:false,
-            validate:{
-                notNull:{msg:`le matricule de l'item ne doit pas etre nulle` },
-                notEmpty:{msg:`le matricule de l'item ne doit pas etre vide`}
-            } 
+        matricule: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                notNull: { msg: `Le matricule de l'item ne doit pas être nul` },
+                notEmpty: { msg: `Le matricule de l'item ne doit pas être vide` }
+            }
         },
-        image:{
-            type:DataTypes.STRING,
-            allowNull:true
+        image: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
-    })
-}
+    });
+};
